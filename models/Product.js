@@ -36,5 +36,13 @@ Product.init(
         key: 'id'
       }
     }
+  },
+  {
+    sequelize,
+    freezeTableName: true,
+    underscored: true,
+    modelName: 'Product'
   }
 )
+
+module.exports = Product;
