@@ -19,6 +19,22 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
   // find a single product by its `id`
   // be sure to include its associated Category and Tag data
+  Product.findOne(
+    {
+      where: {id:req.params.id},
+      include: [ Category, Tag ]
+    }
+  )
+  .then((productData) => {
+    if(!productData){
+      res.status(404).json({message:"No products with that id"});
+    }else{
+      res.status(200).json(productData);
+    }
+  })
+  .catch((err) => {
+    res.status(500).json(err);
+  });
 });
 
 // create new product
@@ -97,6 +113,17 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete one product by its `id` value
+  Product.destroy({ where: { id: req.params.id } })
+    .then((success) => {
+      if(!success){
+        res.status(404).json({message:"no product for id"});
+      }else{
+        res.status(200).json({message:"product deleted"});
+      }
+    })
+    .catch((err) => {
+      res.status(500).json(err);
+    })
 });
 
 module.exports = router;
